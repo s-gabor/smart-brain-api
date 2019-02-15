@@ -1,11 +1,29 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+var knex = require('knex');
+
+const db = knex({
+	client: 'mysql',
+	connection: {
+	    host : '127.0.0.1',
+	    user : 'root',
+	    password : 'shamu',
+	    database : 'cats_app'
+	}
+});
+
+
+// db.select('*').from('cats').then(data => {
+// 	console.log(data);
+// })
+
+
 const database = [
 	{
 		userId: '1',
-		name: 'John',
-		email: 'john@gmail.com',
+		name: 'Sam',
+		email: 'sam@gmail.com',
 		password: '111',
 		rank: 0,
 		joined: new Date()
@@ -24,9 +42,11 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
+
 app.get('/', (req, res) => {
 	res.send(database);
 })
+
 
 app.post('/signin', (req, res) => {
 	const { email, password } = req.body;
@@ -36,6 +56,7 @@ app.post('/signin', (req, res) => {
 		res.json('User and/or password doesn\'t match any active user. Please register!');
 	}
 })
+
 
 app.post('/register', (req, res) => {
 	const { name, email, password } = req.body;
@@ -51,6 +72,7 @@ app.post('/register', (req, res) => {
 	res.send(user);
 })
 
+
 app.put('/image', (req, res) => {
 	const userId = req.body.userId;
 	let isUser = {}; 
@@ -62,6 +84,7 @@ app.put('/image', (req, res) => {
 	})
 	res.send(isUser);
 })
+
 
 app.get('/profile/:userId', (req, res) => {
 	const id = req.params.userId;
@@ -76,44 +99,6 @@ app.get('/profile/:userId', (req, res) => {
 })
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 app.listen(3000, () => console.log('Started server on port 3000.'));
+
+
